@@ -1,0 +1,76 @@
+<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Ekspedisi Arkeolog – Game Asesmen Praaksara</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#E9EFE8;--ink:#1E2B33;--mut:#53636b;--card:#fff;--g:#1F5A47;--on:#fff;--gl:#D6E7DC;--o:#E3A62B;--r:#B5432A;--ln:#C5D3C8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141C20;--ink:#E7EEE9;--mut:#9DB0A8;--card:#1D282D;--g:#6FC3A0;--on:#0F1A15;--gl:#25382F;--ln:#33454A;--o:#F0BC4A;--r:#E27A5E}}
+:root[data-theme="dark"]{--bg:#141C20;--ink:#E7EEE9;--mut:#9DB0A8;--card:#1D282D;--g:#6FC3A0;--on:#0F1A15;--gl:#25382F;--ln:#33454A;--o:#F0BC4A;--r:#E27A5E}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Nunito,system-ui,sans-serif}
+h1,h2,h3{font-family:'Baloo 2',system-ui,sans-serif;line-height:1.2;margin:.2em 0 .4em}h1{font-size:2rem;font-weight:800;color:var(--g)}h2{font-size:1.4rem}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:3;background:var(--bg);border-bottom:2px solid var(--ln);padding:8px 14px;display:flex;justify-content:space-between;align-items:center;font-family:'Baloo 2',sans-serif;font-weight:800;color:var(--g)}
+main{max-width:760px;margin:0 auto;padding:16px 14px 50px}
+.card{background:var(--card);border:2px solid var(--ln);border-radius:16px;padding:16px;margin:0 0 14px}
+.btn{background:var(--g);color:var(--on);border:0;border-radius:12px;padding:10px 18px;font:700 1rem Nunito,sans-serif;cursor:pointer}.btn.alt{background:var(--gl);color:var(--ink)}
+.opt{display:block;width:100%;text-align:left;margin:6px 0;padding:11px 12px;border:2px solid var(--ln);background:var(--card);color:var(--ink);border-radius:12px;font:inherit;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--g)}.opt.ok{background:var(--gl);border-color:var(--g)}.opt.no{border-color:var(--r)}
+.chip{display:inline-block;margin:4px;padding:9px 13px;border:2px solid var(--ln);border-radius:18px;background:var(--card);color:var(--ink);font:700 .95rem Nunito,sans-serif;cursor:pointer;text-align:left}.chip.sel{background:var(--o);border-color:var(--o);color:#1E2B33}.chip.ok{background:var(--gl);border-color:var(--g)}
+.fb{border-left:5px solid var(--o);background:var(--gl);padding:9px 12px;border-radius:8px;margin-top:10px}
+.bar{height:12px;background:var(--gl);border-radius:8px;overflow:hidden}.bar i{display:block;height:100%;background:var(--g)}.bar.t i{background:var(--o);transition:width .1s linear}
+.dots{display:flex;gap:6px;margin-bottom:10px}.dots span{flex:1;height:8px;border-radius:6px;background:var(--ln)}.dots .d{background:var(--g)}.dots .c{background:var(--o)}
+.tag{display:inline-block;background:var(--o);color:#1E2B33;border-radius:8px;padding:0 8px;font-weight:700}.mut{color:var(--mut)}
+input,textarea{width:100%;padding:10px;border:2px solid var(--ln);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:520px){.row{grid-template-columns:1fr}}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--o);outline-offset:2px}
+@media print{header,.btn,.noprint{display:none}}
+</style><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script></head><body>
+<header><span>🧭 Ekspedisi Arkeolog</span><span id="xp"></span></header><main id="app"></main>
+<script>
+const $=s=>document.querySelector(s),sh=a=>[...a].sort(()=>Math.random()-.5);
+let G=null,T,DL=null;try{window.claude&&claude.use('downloads').then(d=>{DL=d}).catch(()=>{})}catch(e){}
+const IND=['Corak kehidupan tiga masa','Urutan perkembangan masa praaksara','Alat dan hasil budaya','Nilai gotong royong dan adaptasi'];
+const REC=['Ulangi materi dengan tabel perbandingan ciri berburu-meramu, bercocok tanam, dan perundagian.','Latihan menyusun garis waktu memakai kartu gambar secara berkelompok.','Kegiatan mencocokkan alat dengan fungsi dan masanya (museum mini di kelas).','Studi kasus gotong royong dan adaptasi di lingkungan sekitar murid.'];
+const TL=['Berburu & meramu tingkat awal','Berburu & meramu tingkat lanjut','Bercocok tanam awal','Menetap di perkampungan','Perundagian (logam)'];
+const MP=[['Kapak perimbas','Memotong dan memukul'],['Gerabah','Menyimpan hasil panen dan air'],['Nekara perunggu','Upacara dan tanda kedudukan'],['Kapak persegi','Mengolah tanah dan kayu untuk ladang']];
+const P1=[{t:'Kelompok Ana berpindah ke tepi sungai karena hewan buruan menjauh. Corak hidup mereka adalah...',o:['Berburu dan meramu','Bercocok tanam','Perundagian','Perdagangan antarpulau'],p:[1,0,0,0],f:'Berpindah mengikuti makanan adalah ciri berburu dan meramu.'},
+{t:'Warga membuka huma, membuat gerabah, dan membangun kampung. Mereka berada pada masa...',o:['Bercocok tanam','Berburu dan meramu','Perundagian','Sebelum mengenal api'],p:[1,0,0,0],f:'Huma, gerabah, dan perkampungan menandakan masa bercocok tanam.'},
+{t:'Munculnya undagi (ahli pembuat alat logam) menandakan masa...',o:['Perundagian','Berburu dan meramu','Bercocok tanam awal','Masa aksara'],p:[1,0,0,0],f:'Undagi adalah ahli logam, ciri khas masa perundagian.'},
+{t:'Ciri yang paling membedakan bercocok tanam dari berburu-meramu adalah...',o:['Mulai menetap dan menghasilkan makanan sendiri','Mengenal api','Membuat alat dari batu','Hidup berkelompok'],p:[1,0,0,0],f:'Bercocok tanam membuat manusia menetap dan menghasilkan makanan sendiri.'}].map(x=>({...x,i:0,m:1}));
+const P4=[{t:'Kemarau panjang membuat sungai surut. Kampung peladang hampir kehabisan air. Apa langkah terbaik?',o:['Warga bergotong royong menggali saluran dan berbagi air secara adil','Setiap keluarga menyimpan air sendiri','Menunggu hujan tanpa berbuat apa-apa'],p:[2,1,0],f:'Gotong royong dan adaptasi membuat sumber daya terbatas cukup untuk semua.'},
+{t:'Hutan tempat berburu mulai sepi hewan. Kelompok berburu-meramu sebaiknya...',o:['Berpindah bersama ke wilayah baru yang makanannya melimpah','Tetap tinggal dan menunggu','Berpencar dan tidak saling berbagi'],p:[2,0,1],f:'Berpindah bersama adalah adaptasi terhadap lingkungan, dan berkelompok lebih aman.'}].map(x=>({...x,i:3,m:2}));
+const TF=[['Masyarakat berburu-meramu menetap di satu desa sepanjang tahun.',0,0],['Gerabah muncul seiring manusia mulai menyimpan hasil panen.',1,2],['Nekara perunggu adalah hasil budaya masa berburu dan meramu.',0,2],['Gotong royong membantu menyelesaikan pekerjaan berat bersama.',1,3],['Kapak persegi dipakai masyarakat perundagian untuk menuang logam.',0,2],['Masa perundagian ditandai pembagian kerja yang makin beragam.',1,0],['Adaptasi berarti menyesuaikan diri dengan lingkungan, misalnya berpindah saat makanan menipis.',1,3],['Perundagian terjadi lebih dulu daripada bercocok tanam.',0,1]];
+const MS=[['Pos 1 · Tebak Masa','Pilih jawaban yang paling tepat.'],['Pos 2 · Jembatan Waktu','Ketuk tahap dari yang paling awal sampai paling akhir.'],['Pos 3 · Pasangan Alat','Ketuk alat, lalu ketuk fungsinya.'],['Pos 4 · Kasus Desa','Ambil keputusan terbaik untuk kelompokmu.'],['Pos 5 · Kilat Benar-Salah','Jawab dalam 12 detik!']];
+const add=(i,e,m)=>{G.sc[i][0]+=e;G.sc[i][1]+=m;G.xp+=e*10};
+const nx=()=>{G.k=0;G.a=null;G.ord=null;G.o=[];G.done=0;G.ro=null;G.mm=[];G.mw=[];G.ml=-1;G.rr=null;G.msg='';G.pos++;render()};
+const lv=p=>p>=80?'Mahir 🌟':p>=50?'Berkembang 🌱':'Perlu bimbingan 🧭';
+function start(){const n=$('#nm').value.trim();if(!n){$('#nm').focus();return}G={name:n,pos:0,k:0,a:null,xp:0,sc:[[0,0],[0,0],[0,0],[0,0]],o:[],done:0,mm:[],mw:[],ml:-1,msg:''};render()}
+function render(){clearInterval(T);const A=$('#app');$('#xp').textContent=G?'⭐ '+G.xp+' XP':'';
+if(!G){A.innerHTML=`<div class="card"><h1>Ekspedisi Arkeolog</h1><p>Selesaikan 5 pos untuk mengetahui seberapa jauh kamu memahami <b>Kehidupan Masyarakat Masa Praaksara</b>. Hasilnya berupa laporan kemampuan yang bisa diunduh sebagai PDF.</p><p><span class="tag">IPS Kelas 7</span> TP 2.1 dan TP 2.2</p><p>Ini bukan ujian yang menakutkan. Jawab dengan jujur agar gurumu tahu bagian yang perlu dibantu.</p><label for="nm"><b>Namamu</b></label><input id="nm" placeholder="Nama lengkap" autocomplete="name"><p><button class="btn" onclick="start()">Mulai ekspedisi</button></p></div>`;return}
+if(G.pos>=5){res();return}
+const m=MS[G.pos];let h=`<div class="dots">${MS.map((_,i)=>`<span class="${i<G.pos?'d':i==G.pos?'c':''}"></span>`).join('')}</div><div class="card"><span class="tag">${m[0]}</span> <span class="mut">${m[1]}</span>`;
+if(G.pos==0||G.pos==3){const L=G.pos?P4:P1,q=L[G.k];G.ord=G.ord||sh(q.o.map((_,i)=>i));const best=Math.max(...q.p);h+=`<p><b>${q.t}</b></p>`+G.ord.map(j=>`<button class="opt ${G.a!=null&&q.p[j]==best?'ok':''} ${G.a==j&&q.p[j]<best?'no':''}" ${G.a!=null?'disabled':''} onclick="qa(${j})">${q.o[j]}</button>`).join('')+(G.a!=null?`<div class="fb"><b>${q.p[G.a]==best?'Tepat!':q.p[G.a]>0?'Sebagian tepat.':'Belum tepat.'}</b> ${q.f}</div><p><button class="btn" onclick="qn(${L.length})">Lanjut</button></p>`:'')}
+else if(G.pos==1){G.ro=G.ro||sh([0,1,2,3,4]);const fin=G.o.length==5;h+=`<p><b>Susun urutannya:</b></p><div>${G.o.map((v,i)=>`<span class="chip ${fin?(v==i?'ok':''):''}">${i+1}. ${TL[v]}</span>`).join('')||'<span class="mut">Belum ada pilihan</span>'}</div><hr>${G.ro.filter(i=>!G.o.includes(i)).map(i=>`<button class="chip" onclick="ps(${i})">${TL[i]}</button>`).join('')}`+(fin?`<div class="fb">Posisi tepat: <b>${G.o.filter((v,i)=>v==i).length} dari 5</b>.<br>Urutan benar: ${TL.map((t,i)=>(i+1)+'. '+t).join('; ')}.</div><p><button class="btn" onclick="nx()">Lanjut</button></p>`:`<p><button class="btn alt" onclick="G.o=[];render()">Ulangi pilihan</button></p>`)}
+else if(G.pos==2){G.rr=G.rr||sh([0,1,2,3]);h+=`<div class="row"><div>${MP.map((p,i)=>`<button class="chip ${G.ml==i?'sel':''} ${G.mm.includes(i)?'ok':''}" ${G.mm.includes(i)?'disabled':''} onclick="G.ml=${i};G.msg='';render()">${p[0]}</button>`).join('<br>')}</div><div>${G.rr.map(j=>`<button class="chip ${G.mm.includes(j)?'ok':''}" ${G.mm.includes(j)?'disabled':''} onclick="pm(${j})">${MP[j][1]}</button>`).join('<br>')}</div></div>${G.msg?`<div class="fb">${G.msg}</div>`:''}`+(G.mm.length==4?`<div class="fb">Semua pasangan benar! Pasangan yang tepat pada percobaan pertama: ${4-G.mw.length} dari 4.</div><p><button class="btn" onclick="nx()">Lanjut</button></p>`:'')}
+else{const q=TF[G.k];h+=`<p class="mut">Pernyataan ${G.k+1}/8</p><div class="bar t"><i id="tb" style="width:100%"></i></div><p><b>${q[0]}</b></p><button class="opt ${G.a!=null&&q[1]==1?'ok':''} ${G.a==1&&q[1]==0?'no':''}" ${G.a!=null?'disabled':''} onclick="tf(1)">✔ Benar</button><button class="opt ${G.a!=null&&q[1]==0?'ok':''} ${G.a==0&&q[1]==1?'no':''}" ${G.a!=null?'disabled':''} onclick="tf(0)">✖ Salah</button>`+(G.a!=null?`<div class="fb"><b>${G.a==-1?'Waktu habis.':G.a==q[1]?'Tepat!':'Belum tepat.'}</b> Jawabannya: ${q[1]?'Benar':'Salah'}.</div><p><button class="btn" onclick="tn()">Lanjut</button></p>`:'')}
+A.innerHTML=h+'</div>';
+if(G.pos==4&&G.a==null){let t=0;T=setInterval(()=>{t+=100;const b=$('#tb');if(b)b.style.width=(100-t/120)+'%';if(t>=12000)tf(-1)},100)}}
+function qa(j){const L=G.pos?P4:P1,q=L[G.k];add(q.i,q.p[j],q.m);G.a=j;render()}
+function qn(n){G.k++;G.a=null;G.ord=null;if(G.k>=n)nx();else render()}
+function ps(i){G.o.push(i);if(G.o.length==5){add(1,G.o.filter((v,i)=>v==i).length,5)}render()}
+function pm(j){if(G.ml<0){G.msg='Pilih alat dulu di kolom kiri.';render();return}if(G.ml==j){add(2,G.mw.includes(j)?0:1,1);G.mm.push(j);G.msg='Tepat!';G.ml=-1}else{if(!G.mw.includes(G.ml))G.mw.push(G.ml);G.msg='Belum cocok. Pikirkan untuk apa alat itu dipakai.'}render()}
+function tf(v){clearInterval(T);const q=TF[G.k];add(q[2],v==q[1]?1:0,1);G.a=v;render()}
+function tn(){G.k++;G.a=null;if(G.k>=8)nx();else render()}
+function sum(){const E=G.sc.reduce((a,s)=>a+s[0],0),M=G.sc.reduce((a,s)=>a+s[1],0),pc=Math.round(E/M*100);const l=G.sc.map((s,i)=>IND[i]+': '+s[0]+'/'+s[1]+' ('+Math.round(s[0]/s[1]*100)+'%) - '+lv(Math.round(s[0]/s[1]*100)).replace(/[^\x20-\x7E]/g,'').trim());
+const fu=G.sc.map((s,i)=>s[0]/s[1]<.8?'- '+REC[i]:'').filter(Boolean);return{E,M,pc,l,fu,t:`Hasil Ekspedisi Praaksara\nNama: ${G.name}\nSkor: ${E}/${M} (${pc}%)\n${l.join('\n')}\n`+(fu.length?'Tindak lanjut:\n'+fu.join('\n'):'Semua indikator sudah mahir.')}}
+function res(){const s=sum(),rk=s.pc>=85?'Ahli Arkeolog':s.pc>=65?'Arkeolog Muda':s.pc>=40?'Penjelajah':'Pemula Ekspedisi';
+$('#app').innerHTML=`<div class="card"><h1>${s.pc>=65?'🏆':'🧭'} ${rk}</h1><p>${G.name}, skormu <b>${s.E} dari ${s.M}</b> (${s.pc}%) dan kamu mengumpulkan <b>${G.xp} XP</b>.</p><p class="noprint"><button class="btn" onclick="pdf()">⬇ Unduh PDF hasilku</button></p></div>
+<div class="card"><h2>Peta kemampuanmu</h2>${G.sc.map((x,i)=>{const p=Math.round(x[0]/x[1]*100);return`<p><b>${IND[i]}</b><br><span class="mut">${lv(p)} · ${x[0]}/${x[1]}</span></p><div class="bar"><i style="width:${p}%"></i></div>`}).join('')}</div>
+<div class="card"><h2>Saran belajar</h2>${s.fu.length?s.fu.map(f=>`<p>${f.slice(2)}</p>`).join(''):'<p>Hebat! Semua indikator sudah mahir. Cobalah membantu temanmu belajar.</p>'}</div>
+<div class="card noprint"><h3>Kirim ke guru</h3><textarea id="st" rows="7" readonly>${s.t}</textarea><p><button class="btn" onclick="pdf()">⬇ Unduh PDF</button> <button class="btn alt" onclick="cp()">Salin ringkasan</button> <button class="btn alt" onclick="G=null;render()">Main lagi</button></p><div id="mg" class="mut"></div></div>`}
+function cp(){const t=$('#st');t.select();try{navigator.clipboard.writeText(t.value).then(()=>$('#mg').textContent='Tersalin. Tempel ke WhatsApp gurumu.').catch(()=>$('#mg').textContent='Teks sudah dipilih. Salin secara manual.')}catch(e){$('#mg').textContent='Teks sudah dipilih. Salin secara manual.'}}
+async function pdf(){const J=window.jspdf;let D=DL;try{D=D||await claude.use('downloads')}catch(e){}if(!J||!D){$('#mg').textContent='Unduhan langsung tidak tersedia di sini, jadi dialog cetak dibuka. Pilih Simpan sebagai PDF.';print();return}const s=sum(),d=new J.jsPDF({unit:'mm',format:'a4'});let y=18;
+const ad=(t,z,b)=>{d.setFont('helvetica',b?'bold':'normal');d.setFontSize(z);d.splitTextToSize(String(t).replace(/[^\x20-\x7E\u00A0-\u00FF\n]/g,''),180).forEach(l=>{if(y>280){d.addPage();y=18}d.text(l,15,y);y+=z*.5});y+=2};
+ad('Laporan Ekspedisi Arkeolog - Masa Praaksara',15,1);ad('IPS Kelas VII | TP 2.1 dan TP 2.2 | '+new Date().toLocaleDateString('id-ID'),10);ad('Nama: '+G.name,12,1);ad('Skor: '+s.E+'/'+s.M+' ('+s.pc+'%) | XP: '+G.xp,12);
+ad('Capaian per indikator',12,1);s.l.forEach(x=>ad(x,11));ad('Tindak lanjut',12,1);(s.fu.length?s.fu:['Semua indikator sudah mahir.']).forEach(x=>ad(x,11));
+try{await D.save({filename:'Laporan-Ekspedisi-'+G.name.replace(/\s+/g,'-')+'.pdf',data:d.output('blob')})}catch(e){if(!e||e.code!='declined')alert('PDF tidak dapat diunduh di sini. Gunakan Salin ringkasan.')}}
+render();
+</script></body></html>
